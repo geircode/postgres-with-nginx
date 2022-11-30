@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: geircode.azurecr.io/postgres:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    container_name: postgres-1
+    environment:
+      - EXAMPLE_CONFIG=/test/test
+      - POSTGRES_USER=yolo
+      - POSTGRES_PASSWORD=yolo
+      - URL_POSTGRES=postgres:5432
+    volumes:
+      - git_repositories:/git
+      - "vscode_server_extensions:/root/.vscode-server/extensions"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+      - '80:80'
+      - '5433:5432'
+    networks:
+      - yolo_common_network
+    # volumes:
+    #   - db:/var/lib/postgresql/data
+networks:
+  yolo_common_network:
+    name: yolo_common_network
+    external: true
+
+volumes:
+  git_repositories: {}
+  vscode_server_extensions: {}
